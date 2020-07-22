@@ -1,0 +1,50 @@
+#morphometrics vs ammonia and total dissolved solids
+#morphometric variables includes weight, total length, body depth, and pectoral length
+
+
+library(CCA)
+DS = read.csv("DS.csv", sep=",", header=TRUE) #raw data for morphometric variables
+str(DS)
+EF4 = read.csv("EF4.csv", sep=",", header=TRUE) #raw data for environmental variables (ammonia and total dissolved solids)
+str(EF4)
+
+fish.cca = cc(DS, EF4)
+plt.cc(fish.cca, type="b",var.label=TRUE)
+
+fish.cca$cor
+rho <- fish.cca$cor
+n <- dim(DS)
+p <- length (DS)
+q <- length (EF4)
+p.asym(rho, n, p, q, tstat="Wilks")
+?p.asym
+
+s1 <-diag(sqrt(diag(cov(DS))))
+s1%*%fish.cca$xcoef
+
+s2 <-diag(sqrt(diag(cov(EF4))))
+s2%*%fish.cca$ycoef
+
+#morphometrics vs dissolved oxygen and pH
+library(CCA)
+fish = read.csv("PS.csv", sep=",", header=TRUE) #raw data for anatomical points
+str(fish)
+EF5 = read.csv("EF5.csv", sep=",", header=TRUE) #raw data for environmental factors (dissolved oxygen and pH)
+str(EF5)
+
+fish2.cca = cc(fish, EF5)
+plt.cc(fish2.cca, type="b",var.label=TRUE)
+
+fish2.cca$cor
+rho <- fish2.cca$cor
+n <- dim(fish)
+p <- length (fish)
+q <- length (EF5)
+p.asym(rho, n, p, q, tstat="Wilks")
+?p.asym
+
+s1 <-diag(sqrt(diag(cov(fish))))
+s1%*%fish2.cca$xcoef
+
+s2 <-diag(sqrt(diag(cov(EF5))))
+s2%*%fish2.cca$ycoef
